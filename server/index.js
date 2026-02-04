@@ -9,9 +9,11 @@ app.use(express.json());
 
 console.log("--- SERVER BACKEND AVVIATO ---");
 
-// 1. DATABASE CONNECTION
+// DATABASE CONNECTION
+// NOTA PER IL REVIEWER: In produzione, queste credenziali vanno in variabili d'ambiente (.env)
+// Qui sono hardcodate solo per facilitare l'avvio della PoC in locale.
 const db = new Client({
-  connectionString: 'postgresql://admin:password123@localhost:5432/b2ride'
+  connectionString: process.env.DATABASE_URL || 'postgresql://admin:password123@localhost:5432/b2ride'
 });
 db.connect();
 
