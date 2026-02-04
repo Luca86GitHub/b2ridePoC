@@ -157,14 +157,50 @@ Nota per Codespaces: Assicurati di rendere Public la porta 3000 nel pannello "Po
 
 -----
 
-Decisioni Architetturali (Design Choices)
-Separazione Ingestion/Consumption: L'uso di MQTT disaccoppia i dispositivi dal server. In uno scenario di produzione, questo permette di scalare i consumer indipendentemente dal numero di dispositivi connessi.
+📘 B2-Ride: Manuale di Avvio (Ambiente GitHub Codespaces)
+Questo documento descrive i passaggi necessari per avviare l'intera infrastruttura della Proof of Concept (PoC) B2-Ride all'interno di un ambiente GitHub Codespaces.
+1. Prerequisiti
+Assicurarsi di trovarsi nella root del progetto (/workspaces/b2ridePoC) e che i file di configurazione (docker-compose.yml, package.json, ecc.) siano presenti.
+2. Avvio Infrastruttura (Docker)
+Il primo passo è avviare i container per il Database e il Broker MQTT. Eseguire nel terminale:
+Bash
+docker-compose up -d
 
-PostgreSQL Upsert Strategy:
+Verifica: Eseguire docker ps e controllare che i container postgres e mosquitto siano nello stato "Up".
+3. Inizializzazione Database
+Se è la prima volta che si avvia, o se si vuole resettare i dati:
+Bash
+cd server
+npm install  # (Solo se non fatto in precedenza)
+node init-db.js
 
-SQL
+Output atteso: "Tabella scooters verificata", "Dati iniziali inseriti".
+4. Avvio Backend (Server)
+Il cuore del sistema che gestisce MQTT, Database e WebSockets.
+Bash
+# Assicurarsi di essere nella cartella /server
+node index.js
 
-INSERT INTO scooters (...) ON CONFLICT (id) DO UPDATE ...
-Questa scelta rende il sistema autoconsistente. Non è necessario pre-registrare i veicoli: appena un nuovo scooter trasmette, viene automaticamente censito nel sistema (Device Provisioning automatico).
+Output atteso: "🚀 Real-Time Server running on port 3000", "✅ MQTT Connected".
+5. Avvio Simulatore (Flotta Virtuale)
+Apre un nuovo terminale per simulare i veicoli in movimento.
+Bash
+cd simulator
+npm install # (Solo la prima volta)
+node simulator.js
 
-Leaflet CircleMarkers: Al posto di icone statiche, sono stati utilizzati marker vettoriali per garantire performance elevate e visibilità a qualsiasi livello di zoom senza errori di caricamento risorse.
+Output atteso: "🛴 FLOTTA PRONTA", seguito dai log di invio dati (S01, S02...).
+6. Avvio Frontend (Dashboard)
+Apre un terzo terminale per l'interfaccia utente.
+Bash
+cd client
+npm install # (Solo la prima volta)
+npx ng serve --host 0.0.0.0
+
+Output atteso: "Application bundle generation complete".
+⚠️ Configurazione Critica per Codespaces
+Affinché il Frontend comunichi con il Backend, la porta del server deve essere pubblica.
+In VS Code, andare nel pannello PORTS (in basso).
+Cliccare col tasto destro sulla porta 3000.
+Selezionare Port Visibility -> Public.
+Copiare l'indirizzo pubblico (es. https://...-3000.app.github.dev) e verificare che sia aggiornato nel file client/src/app/app.component.ts.
