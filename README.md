@@ -13,6 +13,10 @@ Il progetto simula un'architettura **IoT End-to-End**: dalla generazione dei dat
 
 ## 🏗️ Componenti Chiave
 
+* **Frontend:** Dashboard **Angular** con mappe interattive **Leaflet**.
+    * Rendering vettoriale (`CircleMarker`) per massime performance.
+    * Comunicazione **Real-Time via Socket.io**: il client non fa polling, ma riceve eventi push dal server per aggiornamenti a latenza zero.
+
 * **Simulator (IoT Edge):** Script Node.js che simula il movimento fisico di 2 veicoli (S01, S02) su un percorso geografico reale (Milano), trasmettendo telemetria ogni 3 secondi.
 
 * **Message Broker:** Eclipse Mosquitto gestisce le comunicazioni asincrone tramite protocollo MQTT.
@@ -36,6 +40,17 @@ Il progetto simula un'architettura **IoT End-to-End**: dalla generazione dei dat
 * **Broker:** Eclipse Mosquitto
 * **Frontend:** Angular (Standalone Components), Leaflet.js
 * **Dev Environment:** GitHub Codespaces
+---
+
+## 🔮 Roadmap Futura
+
+Le seguenti funzionalità sono previste per la versione 2.0 (Production Ready):
+
+- [x] **WebSockets:** Implementati! (Socket.io sostituisce HTTP polling).
+- [ ] **Data Lake:** Aggiunta di una tabella `ride_history` (Time-series) per storicizzare i percorsi e calcolare il chilometraggio.
+- [ ] **Message Queue:** Introduzione di **RabbitMQ** tra Mosquitto e Node.js per garantire la persistenza dei messaggi in caso di picchi di traffico (Load Leveling).
+- [ ] **Authentication:** Implementazione JWT per proteggere le API backend.
+- [ ] **Dockerizzazione Totale:** Containerizzazione anche dei servizi Node e Angular (Nginx) per deploy su Kubernetes.
 
 ---
 
