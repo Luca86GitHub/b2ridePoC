@@ -168,16 +168,3 @@ INSERT INTO scooters (...) ON CONFLICT (id) DO UPDATE ...
 Questa scelta rende il sistema autoconsistente. Non è necessario pre-registrare i veicoli: appena un nuovo scooter trasmette, viene automaticamente censito nel sistema (Device Provisioning automatico).
 
 Leaflet CircleMarkers: Al posto di icone statiche, sono stati utilizzati marker vettoriali per garantire performance elevate e visibilità a qualsiasi livello di zoom senza errori di caricamento risorse.
-
-🔮 Roadmap Futura
-Le seguenti funzionalità sono previste per la versione 2.0 (Production Ready):
-
-[ ] Data Lake: Aggiunta di una tabella ride_history (Time-series) per storicizzare i percorsi e calcolare il chilometraggio.
-
-[ ] Message Queue: Introduzione di RabbitMQ tra Mosquitto e Node.js per garantire la persistenza dei messaggi in caso di picchi di traffico (Load Leveling).
-
-[ ] WebSockets: Sostituzione del polling HTTP con Socket.io per aggiornamenti mappa push in tempo reale.
-
-[ ] Authentication: Implementazione JWT per proteggere le API backend.
-
-[ ] Dockerizzazione Totale: Containerizzazione anche dei servizi Node e Angular (Nginx) per deploy su Kubernetes.
