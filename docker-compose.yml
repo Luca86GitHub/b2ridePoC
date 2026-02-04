@@ -1,0 +1,46 @@
+version: '3.8'  # Versione della sintassi di Docker Compose
+
+services:       # Elenco dei "robot" (container) da avviare
+  
+  # --- SERVIZIO DATABASE ---
+  postgres:
+    # L'immagine da scaricare (il "CD di installazione").
+    # "15-alpine" significa versione 15, variante leggera (pochi MB).
+    image: postgres:15-alpine
+    
+    # Variabili d'ambiente per configurare il DB al primo avvio.
+    environment:
+      POSTGRES_USER: admin        # Utente amministratore
+      POSTGRES_PASSWORD: password123 # Password (non sicura, ok per dev)
+      POSTGRES_DB: b2ride         # Nome del database da creare subito
+    
+    # Mappatura Porte: "PortaEsterna : PortaInterna"
+    # Ti permette di collegarti al DB dal tuo computer usando la porta 5432.
+    ports:
+      - "5432:5432"
+    
+    # Volumi: "NomeVolume : PercorsoInterno"
+    # Serve a salvare i dati FUORI dal container. 
+    # Se cancelli il container, i dati restano nel volume 'pgdata'.
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # --- SERVIZIO MESSAGGISTICA ---
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"  # Porta per Node.js e Simulator
+      - "9001:9001"  # Porta per il Client Web (Angular/Ionic)
+    
+    # Qui mappiamo cartelle fisiche (./config) dentro il container.
+    # Serve a "iniettare" il tuo file mosquitto.conf dentro al container.
+    volumes:
+      - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+# Definizione dei volumi persistenti (hard disk virtuali)
+volumes:
+  pgdata:
+  mosquitto_data:
+  mosquitto_log:
