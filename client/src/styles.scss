@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+@import "leaflet/dist/leaflet.css";
+
+/* Forza la visibilità dei marker anche se l'icona manca */
+.leaflet-marker-icon {
+    background: red;
+    border-radius: 50%;
+    width: 12px !important;
+    height: 12px !important;
+}
